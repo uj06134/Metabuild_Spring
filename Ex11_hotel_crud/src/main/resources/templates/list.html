@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>호텔 예약 리스트</title>
+</head>
+<body>
+<h2 align="center"> 호텔 예약 리스트 </h2>
+
+<table border="1" width="60%" align="center">
+    <!-- 검색창 -->
+    <tr>
+        <td colspan="9" align="center">
+            <form th:action="@{list}" method="get">
+                <select name="whatColumn">
+                    <option value="all" th:selected="${whatColumn == 'all'}">전체검색</option>
+                    <option value="name" th:selected="${whatColumn == 'name'}">이름</option>
+                    <option value="room_type" th:selected="${whatColumn == 'room_type'}">객실타입</option>
+                </select>
+                <input type="text" name="keyword" th:value="${keyword}">
+                <input type="submit" value="검색">
+            </form>
+        </td>
+    </tr>
+
+    <!-- 컬럼 헤더 -->
+    <tr>
+        <th>번호</th>
+        <th>이름</th>
+        <th>서비스</th>
+        <th>객실타입</th>
+        <th>결제방식</th>
+        <th>체크인 날짜</th>
+        <th>숙박 일수</th>
+        <th>수정</th>
+        <th>삭제</th>
+    </tr>
+
+    <!-- 데이터 반복 출력 -->
+    <th:block th:each="hDto : ${lists}">
+        <tr>
+            <td th:text="${hDto.num}"></td>
+            <td th:text="${hDto.name}"></td>
+            <td th:text="${hDto.servicesAsString}"></td>
+            <td th:text="${hDto.room_type}"></td>
+            <td th:text="${hDto.payment}"></td>
+            <td th:text="${hDto.checkin_date}"></td>
+            <td th:text="${hDto.nights}"></td>
+            <td>
+                <a th:href="@{/update(num=${hDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a>
+            </td>
+            <td>
+                <a th:href="@{/delete(num=${hDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a>
+            </td>
+        </tr>
+    </th:block>
+
+    <!-- 삽입 버튼 -->
+    <tr>
+        <td colspan="9" align="center">
+            <a href="insert">예약하기</a>
+        </td>
+    </tr>
+
+    <!-- 페이지네이션 -->
+    <tr>
+        <td colspan="9" align="center">
+                <span th:if="${page > 1}">
+                    <a th:href="@{/list(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a>
+                </span>
+
+            <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+                    <a th:if="${i != page}"
+                       th:href="@{/list(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                       th:text="${i}"></a>
+
+                    <span th:if="${i == page}"
+                          th:text="${i}"
+                          style="font-weight:bold;color:black"></span>
+                </span>
+
+            <span th:if="${page < totalPage}">
+                    <a th:href="@{/list(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+                </span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

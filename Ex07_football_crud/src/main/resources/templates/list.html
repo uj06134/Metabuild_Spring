@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    <table border="1">
+        <!-- 검색창 -->
+        <tr>
+            <td colspan="5" style="text-align:center; padding:10px;">
+                <form th:action="@{list}" method="get">
+                    <select name="whatColumn">
+                        <option value="all" th:selected="${whatColumn == 'all'}">전체검색</option>
+                        <option value="win" th:selected="${whatColumn == 'win'}">우승예상국가</option>
+                        <option value="round16" th:selected="${whatColumn == 'round16'}">16강예상국가</option>
+                    </select>
+                    <input type="text" name="keyword" th:value="${keyword}">
+                    <input type="submit" value="검색">
+                </form>
+            </td>
+        </tr>
+
+        <tr>
+            <th>번호</th>
+            <th>아이디</th>
+            <th>비번</th>
+            <th>우승예상국가</th>
+            <th>16강예상국가</th>
+        </tr>
+        <th:block th:each="fDto : ${lists}">
+            <tr>
+                <td th:text="${fDto.num}"></td>
+                <td>
+                    <a th:href="@{/content_view(num=${fDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                       th:text="${fDto.id}"></a>
+                </td>
+                <td th:text="${fDto.pw}"></td>
+                <td th:text="${fDto.win}"></td>
+                <td th:text="${fDto.round16AsString}"></td>
+            </tr>
+        </th:block>
+        <tr>
+            <td colspan="5" style="text-align:center;">
+                <a href="write">삽입</a>
+            </td>
+        </tr>
+
+        <!-- 페이지네이션 -->
+        <tr>
+            <td colspan="5" style="text-align:center;">
+                <span th:if="${page > 1}">
+                    <a th:href="@{/list(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a>
+                </span>
+
+                <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+                    <a th:if="${i != page}"
+                       th:href="@{/list(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                       th:text="${i}"></a>
+
+                    <span th:if="${i == page}"
+                          th:text="${i}"
+                          style="font-weight:bold;color:black"></span>
+                </span>
+
+                <span th:if="${page < totalPage}">
+                    <a th:href="@{/list(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+                </span>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

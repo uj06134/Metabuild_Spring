@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.TravelMapper">
+
+    <resultMap id="travelResultMap" type="com.example.Ex02.dto.TravelDto">
+        <id property="num" column="num"></id>
+        <result property="name" column="name"></result>
+        <result property="age" column="age"></result>
+        <result property="areaAsString" column="area"></result>
+        <result property="style" column="style"></result>
+        <result property="price" column="price"></result>
+    </resultMap>
+
+    <insert id="insertTravel" parameterType="com.example.Ex02.dto.TravelDto">
+        insert into travel
+        values(travel_seq.nextval, #{name}, #{age}, #{areaAsString}, #{style}, #{price})
+    </insert>
+    <select id="selectAll" resultMap="travelResultMap">
+        select * from travel
+        <where>
+            <choose>
+                <!-- 1) 전체 검색(all)인 경우: style, area 모두 검색 -->
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    name like '%' || #{keyword} || '%' or
+                    style like '%' || #{keyword} || '%' or
+                    area like '%' || #{keyword} || '%'
+                </when>
+                <!-- 2) 특정 컬럼 검색인 경우 -->
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword != ''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+        order by num
+        <!-- offset #{offset} rows : 앞에서 #{offset} 개의 행을 건너뜀 -->
+        <!-- fetch next #{limit} rows only : 그 다음 #{limit} 개의 행만 가져옴 -->
+        offset #{offset} rows fetch next #{limit} rows only
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*)
+        from travel
+        <where>
+            <choose>
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    name like '%' || #{keyword} || '%' or
+                    style like '%' || #{keyword} || '%' or
+                    area like '%' || #{keyword} || '%'
+                </when>
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword != ''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="findByNum" resultMap="travelResultMap">
+        select * from travel
+        where num = #{num}
+    </select>
+    <update id="updateTravel" parameterType="com.example.Ex02.dto.TravelDto">
+        update travel set name = #{name}, age = #{age}, area = #{areaAsString}, style =  #{style}, price = #{price}
+        where num = #{num}
+    </update>
+    <delete id="deleteTravel" parameterType="com.example.Ex02.dto.TravelDto">
+        delete travel
+        where num = #{num}
+    </delete>
+
+</mapper>

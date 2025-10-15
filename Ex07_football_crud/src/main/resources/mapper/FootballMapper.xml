@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.FootballMapper">
+    <!-- select -->
+    <resultMap id="footballResultMap" type="com.example.Ex02.dto.FootballDto">
+        <id property="num" column="num"></id> <!--primary키 설정-->
+        <result property="id" column="id"></result>
+        <result property="pw" column="pw"></result>
+        <result property="win" column="win"></result>
+        <result property="round16AsString" column="round16"></result>
+    </resultMap>
+    <insert id = "insertFootball" parameterType="com.example.Ex02.dto.FootballDto">
+        insert into football(num, id, pw, win, round16)
+        values(fb_seq.nextval, #{id}, #{pw}, #{win}, #{round16AsString})
+    </insert>
+    <select id="selectAll" resultMap="footballResultMap">
+        select * from football
+        <where>
+            <choose>
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    win like '%' || #{keyword} || '%' or
+                    round16 like '%' || #{keyword} || '%'
+                </when>
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword != ''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+        order by num
+        offset #{offset} rows fetch next #{limit} rows only
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*)
+        from football
+        <where>
+            <choose>
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    win like '%' || #{keyword} || '%' or
+                    round16 like '%' || #{keyword} || '%'
+                </when>
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword != ''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="findByNum" resultMap="footballResultMap">
+        select * from football
+        where num = #{num}
+    </select>
+    <update id="updateFootball" parameterType="com.example.Ex02.dto.FootballDto">
+        update football set pw = #{pw}, win = #{win}, round16 = #{round16AsString}
+        where num = #{num}
+    </update>
+    <delete id="deleteFootball" parameterType="com.example.Ex02.dto.FootballDto">
+        delete football
+        where num = #{num}
+    </delete>
+</mapper>
+        <!--
+        ResultSet rs
+        while(rs.next()) {
+            FootballDto dto = new FootballDto();
+            dto.setNum(rs.getInt("num"));
+            dto.setId(rs.getString("id"));
+            dto.setPw(rs.getString("pw"));
+            dto.setWin(rs.getString("win"));
+            dto.setRound16AsString(rs.getString("round16"));
+            lists.add(dto);
+        }
+        -->

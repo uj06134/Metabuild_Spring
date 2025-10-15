@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 상세화면</title>
+    <style>
+        th {
+            text-align: center;
+            }
+    </style>
+</head>
+<body>
+<h1>상품 상세보기</h1>
+<div th:insert="~{fragment :: header}"></div>
+<table border="1" width="600" style="border-collapse:collapse;">
+    <tr>
+        <td rowspan="6" style="padding:0; width:200px; height:300px;">
+            <img th:src="@{'/images/' + ${pDto.image}}"
+                 style="width:100%; height:100%; object-fit:cover; display:block;">
+        </td>
+
+        <th>상품명</th>
+        <td th:text="${pDto.name}"></td>
+    </tr>
+    <tr>
+        <th>가격</th>
+        <td th:text="${pDto.price}"></td>
+    </tr>
+    <tr>
+        <th>재고 수량</th>
+        <td th:text="${pDto.stock}"></td>
+    </tr>
+    <tr>
+        <th>설명</th>
+        <td th:text="${pDto.contents}"></td>
+    </tr>
+    <tr>
+        <th>주문수량</th>
+        <td>
+            <form th:action="@{/add.mall}" method="post" th:object="${pDto}">
+                <!-- 상품 번호 전달 -->
+                <input type="hidden" th:field="*{num}">
+
+                <!-- 주문 수량 입력 -->
+                <input type="text" th:field="*{orderqty}" value="1">
+
+                <!-- 페이징, 검색 조건 유지 -->
+                <input type="hidden" name="whatColumn" th:value="${whatColumn}">
+                <input type="hidden" name="keyword" th:value="${keyword}">
+                <input type="hidden" name="page" th:value="${page}">
+
+                <input type="submit" value="주문">
+            </form>
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align:center;">
+            <a th:href="@{/plist.prd(page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">
+                상품리스트
+            </a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

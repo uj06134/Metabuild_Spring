@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 수정</title>
+</head>
+<body>
+<h2>회원 수정</h2>
+<form th:action="@{/modify}" method="post">
+    <input type="hidden" name="num" th:value="${pDto.num}">
+
+    <table border="1" width="500">
+        <tr>
+            <th>아이디</th>
+            <td>
+                <input type="text" name="id" th:value="${pDto.id}" readonly>
+            </td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td>
+                <input type="text" name="name" th:value="${pDto.name}">
+            </td>
+        </tr>
+        <tr>
+            <th>나이</th>
+            <td>
+                <input type="text" name="age" th:value="${pDto.age}">
+            </td>
+        </tr>
+    </table>
+
+    <p>
+        <input type="submit" value="수정하기">
+        <a th:href="@{/list}">목록으로</a>
+    </p>
+</form>
+</body>
+</html>

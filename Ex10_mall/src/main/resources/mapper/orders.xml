@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.OrderMapper">
+    <insert id="insertOrder">
+        insert into orders (oid, mid, orderdate)
+        values(seqoid.nextval, #{mid}, sysdate)
+    </insert>
+    <select id="getMaxOid" resultType="int">
+        select max(oid)
+        from orders
+    </select>
+    <select id="orderMall">
+        select *
+        from orders
+        where mid = #{id}
+        order by oid desc
+    </select>
+    <select id="showDetail">
+        select num as pnum, name as pname, qty, price, qty*price as amount
+        from (orders o inner join orderdetails od
+        on o.oid = od.oid) inner join products
+        on pnum = num and o.oid = #{oid}
+    </select>
+</mapper>

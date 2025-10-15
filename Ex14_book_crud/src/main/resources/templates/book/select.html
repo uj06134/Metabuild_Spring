@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>도서 목록 페이지</title>
+
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            // 전체 선택 / 해제
+            function allCheck() {
+                const allChecked = document.getElementById("all").checked;
+                const rowChecks = document.getElementsByName("row");
+
+                for (let i = 0; i < rowChecks.length; i++) {
+                    rowChecks[i].checked = allChecked;
+                }
+            }
+
+            // 선택 항목 삭제
+            function checkDelete() {
+                const rowChecks = document.getElementsByName("row");
+                let hasChecked = false;
+
+                // 한 개라도 체크되어 있는지 확인
+                for (let i = 0; i < rowChecks.length; i++) {
+                    if (rowChecks[i].checked) {
+                        hasChecked = true;
+                        break;
+                    }
+                }
+
+                if (!hasChecked) {
+                    alert('삭제할 도서를 한 개 이상 선택하세요.');
+                    return;
+                }
+
+                if (confirm('정말 삭제하시겠습니까?')) {
+                    document.myform.submit();
+                } else {
+                    alert('삭제 작업이 취소되었습니다.');
+                }
+            }
+        </script>
+    </th:block>
+</head>
+
+<body>
+<div class="content" layout:fragment="content">
+    <h2>도서 목록</h2>
+
+    <!-- 검색창 -->
+    <form th:action="@{/blist}" method="get"
+          class="d-flex justify-content-end align-items-center mb-3 gap-2">
+        <input type="text" name="keyword" th:value="${keyword}"
+               class="form-control w-auto" placeholder="제목 또는 저자입력"
+               style="min-width: 250px;">
+        <button type="submit" class="btn btn-primary">검색</button>
+    </form>
+
+    <!-- 도서 목록 테이블 -->
+    <form name="myform" action="/book/checkDelete" method="post">
+        <table class="table table-hover text-center align-middle">
+            <thead class="table-light">
+            <tr>
+                <th><input type="checkbox" id="all" onclick="allCheck()"> 번호</th>
+                <th>제목</th>
+                <th>저자</th>
+                <th>출판사</th>
+                <th>가격</th>
+                <th>입고일</th>
+                <th>배송비</th>
+                <th>구매가능서점</th>
+                <th>보유수량</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="book : ${bookList}">
+                <td>
+                    <input type="checkbox" name="row" th:value="${book.no}">
+                    <label th:text="${book.no}"></label>
+                </td>
+                <td>
+                    <a th:href="@{/book/detail(no=${book.no}, page=${page}, size=${size}, keyword=${keyword})}"
+                       th:text="${book.title}" style="text-decoration: none;"></a>
+                </td>
+                <td th:text="${book.author}"></td>
+                <td th:text="${book.publisher}"></td>
+                <td th:text="${book.price}"></td>
+                <td th:text="${book.buy}"></td>
+                <td th:text="${book.kind}"></td>
+                <td th:text="${book.bookstore}"></td>
+                <td th:text="${book.count}"></td>
+                <td>
+                    <a th:href="@{/book/update(no=${book.no}, page=${page}, size=${size}, keyword=${keyword})}">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/book/delete(no=${book.no}, page=${page}, size=${size}, keyword=${keyword})}"
+                       onclick="return confirm('정말 삭제하시겠습니까?');"
+                       style="text-decoration: none; color: inherit;">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 버튼 영역 -->
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-primary"
+                    th:onclick="|location.href='@{/book/insert}'|">
+                추가
+            </button>
+            <button type="button" class="btn btn-danger" onclick="checkDelete()">
+                선택항목 삭제
+            </button>
+        </div>
+    </form>
+
+    <br>
+
+    <!-- 페이지네이션 -->
+    <div th:if="${bookList.totalPages > 0}">
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${bookList.hasPrevious()}?'':'disabled'">
+                    <a class="page-link"
+                       th:href="@{/blist(page=${bookList.number-1}, size=${bookList.size}, keyword=${keyword})}">
+                        이전
+                    </a>
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0, bookList.totalPages-1)}"
+                    th:classappend="${i==bookList.number}?'active':''">
+                    <a class="page-link"
+                       th:href="@{/blist(page=${i}, size=${bookList.size}, keyword=${keyword})}"
+                       th:text="${i+1}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${bookList.hasNext()}?'':'disabled'">
+                    <a class="page-link"
+                       th:href="@{/blist(page=${bookList.number+1}, size=${bookList.size}, keyword=${keyword})}">
+                        다음
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>

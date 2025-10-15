@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 리스트</title>
+</head>
+<body>
+<h1>상품 리스트 화면</h1>
+<div th:insert="~{fragment :: header}"></div>
+<table border="1" width="800" style="text-align:center; border-collapse:collapse;">
+
+    <!-- 검색창 -->
+    <tr>
+        <td colspan="6" style="text-align:center; padding:10px;">
+            <form th:action="@{plist.prd}" method="get">
+                <select name="whatColumn">
+                    <option value="all" th:selected="${whatColumn == 'all'}">전체검색</option>
+                    <option value="name" th:selected="${whatColumn == 'name'}">상품명</option>
+                    <option value="contents" th:selected="${whatColumn == 'contents'}">설명</option>
+                </select>
+                <input type="text" name="keyword" th:value="${keyword}">
+                <input type="submit" value="검색">
+            </form>
+        </td>
+    </tr>
+
+    <!-- 추가 버튼 -->
+    <tr>
+        <td colspan="6" style="text-align:right;">
+            <button type="button" onclick="location.href='/pinsert.prd'">추가하기</button>
+        </td>
+    </tr>
+
+    <!-- 컬럼 헤더 -->
+    <tr>
+        <th>상품번호</th>
+        <th>상품명</th>
+        <th>설명</th>
+        <th>가격</th>
+        <th>수정</th>
+        <th>삭제</th>
+    </tr>
+
+    <!-- 데이터 반복 출력 -->
+    <th:block th:each="pDto : ${productsLists}">
+        <tr>
+            <td th:text="${pDto.num}"></td>
+            <td>
+            <a th:href="@{/pview.prd(num=${pDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}"
+               th:text="${pDto.name}"></a>
+            </td>
+            <td th:text="${pDto.contents}"></td>
+            <td th:text="${pDto.price}"></td>
+            <td>
+                <a th:href="@{/pupdate.prd(num=${pDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a>
+            </td>
+            <td>
+                <a th:href="@{/pdelete.prd(num=${pDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a>
+            </td>
+        </tr>
+    </th:block>
+    <!-- 페이지네이션 -->
+    <tr>
+        <td colspan="6" style="text-align:center;">
+                <span th:if="${page > 1}">
+                    <a th:href="@{/plist.prd(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a>
+                </span>
+
+            <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+                    <a th:if="${i != page}"
+                       th:href="@{/plist.prd(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                       th:text="${i}"></a>
+
+                    <span th:if="${i == page}"
+                          th:text="${i}"
+                          style="font-weight:bold;color:black"></span>
+                </span>
+
+            <span th:if="${page < totalPage}">
+                    <a th:href="@{/plist.prd(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+                </span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

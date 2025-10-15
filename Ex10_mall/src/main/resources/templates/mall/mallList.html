@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+<table border="1" width="400" style="text-align:center; border-collapse:collapse;">
+    <tr>
+        <td colspan="5">
+        주문자 정보: <span th:text="${session.loginInfo.name}"></span>(<span th:text="${session.loginInfo.id}"></span>)
+        </td>
+    </tr>
+    <tr>
+        <th>상품번호</th>
+        <th>상품명</th>
+        <th>주문수량</th>
+        <th>단가</th>
+        <th>금액</th>
+    </tr>
+        <th:block th:each="product: ${shopLists}">
+            <tr>
+                <td th:text="${product.pnum}"></td>
+                <td th:text="${product.pname}"></td>
+                <td th:text="${product.qty}"></td>
+                <td th:text="${#numbers.formatDecimal(product.price,0,'COMMA',0,'NONE')}"></td>
+                <td th:text="${#numbers.formatDecimal(product.amount,0,'COMMA',0,'NONE')}"></td>
+            </tr>
+        </th:block>
+    <tr>
+        <td colspan="3">
+            <a th:href="@{/calculate.mall}">결제하기</a>
+            <a th:href="@{/plist.prd}">추가하기</a>
+        </td>
+        <td colspan="2">
+            총금액: <span th:text="${#numbers.formatDecimal(totalAmount,0,'COMMA',0,'NONE')}"></span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    아이디: <span th:text="${fDto.id}"></span><br>
+    비번: <span th:text="${fDto.pw}"></span><br>
+    우승예상국가: <span th:text="${fDto.win}"></span><br>
+    16강예상국가: <span th:each="r : ${fDto.round16}" th:text="${r} + ' '"></span>
+</body>
+</html>

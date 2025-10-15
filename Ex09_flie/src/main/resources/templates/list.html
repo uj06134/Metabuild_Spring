@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    list.html<br>
+    <table border="1">
+        <tr>
+            <th>아이디</th>
+            <th>이름</th>
+            <th>파일이름</th>
+            <th>파일크기</th>
+            <th>이미지 보기</th>
+        </tr>
+        <th:block th:each="info: ${lists}">
+            <tr>
+                <td th:text="${info.id}"></td>
+                <td th:text="${info.name}"></td>
+                <td th:text="${info.filename}"></td>
+                <td th:text="${info.fileSize}"></td>
+                <td>
+                    <img th:src="@{|/images/${info.filename}|}" width="100" height="100">
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</body>
+</html>

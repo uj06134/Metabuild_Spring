@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>호텔 예약 입력</title>
+    <style>
+        .err {
+         color: red;
+        }
+    </style>
+</head>
+<body>
+<h2>호텔 예약 입력</h2>
+
+<form th:action="@{/insertProc}" th:object="${hDto}" method="post">
+    <table border="1">
+        <tr>
+            <th>이름</th>
+            <td>
+                <input type="text" th:field="*{name}">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="err"></div>
+            </td>
+
+        </tr>
+        <tr>
+            <th>추가 서비스</th>
+            <td>
+                <input type="checkbox" th:field="*{services}" value="조식">조식
+                <input type="checkbox" th:field="*{services}" value="스파">스파
+                <input type="checkbox" th:field="*{services}" value="픽업">픽업
+                <input type="checkbox" th:field="*{services}" value="라운지">라운지
+                <div th:if="${#fields.hasErrors('services')}" th:errors="*{services}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>객실 타입</th>
+            <td>
+                <input type="radio" th:field="*{room_type}" value="스탠다드">스탠다드
+                <input type="radio" th:field="*{room_type}" value="디럭스">디럭스
+                <input type="radio" th:field="*{room_type}" value="스위트">스위트
+                <div th:if="${#fields.hasErrors('room_type')}" th:errors="*{room_type}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>결제 방식</th>
+            <td>
+                <select th:field="*{payment}">
+                    <option value="">선택하세요</option>
+                    <option value="카드">카드</option>
+                    <option value="계좌이체">계좌이체</option>
+                    <option value="현금">현금</option>
+                </select>
+                    <div th:if="${#fields.hasErrors('payment')}" th:errors="*{payment}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>체크인 날짜</th>
+            <td>
+                <input type="date" th:field="*{checkin_date}">
+                <div th:if="${#fields.hasErrors('checkin_date')}" th:errors="*{checkin_date}" class="err"></div>
+
+            </td>
+        </tr>
+        <tr>
+            <th>숙박 일수</th>
+            <td>
+                <input type="number" th:field="*{nights}">
+                <div th:if="${#fields.hasErrors('nights')}" th:errors="*{nights}" class="err"></div>
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" value="예약하기">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

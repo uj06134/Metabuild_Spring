@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.HotelMapper">
+    <resultMap id="hotelResultMap" type="com.example.Ex02.dto.HotelDto">
+        <result property="servicesAsString" column="services"/>
+    </resultMap>
+
+
+    <select id="selectAll" resultMap="hotelResultMap">
+        select num, name, services, room_type, payment, to_char(checkin_date, 'yyyy-mm-dd') as checkin_date, nights
+        from hotel
+        <where>
+            <choose>
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    name like '%' || #{keyword} || '%'
+                    or room_type like '%' || #{keyword} || '%'
+                </when>
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword != ''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+        order by num
+        offset #{offset} rows fetch next #{limit} rows only
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*)
+        from hotel
+        <where>
+            <choose>
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    name like '%' || #{keyword} || '%'
+                    or room_type like '%' || #{keyword} || '%'
+                </when>
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword != ''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <insert id="insertHotel">
+        insert into hotel
+        values(hotel_seq.nextval, #{name}, #{servicesAsString}, #{room_type}, #{payment}, to_date(#{checkin_date}, #{nights})
+    </insert>
+
+    <select id="findByNum" resultMap="hotelResultMap">
+        select num, name, services, room_type, payment, to_char(checkin_date, 'yyyy-mm-dd') as checkin_date, nights
+        from hotel
+        where num = #{num}
+    </select>
+
+    <update id="updateHotel">
+        update hotel set name = #{name}, services = #{servicesAsString}, room_type = #{room_type}, payment = #{payment}, checkin_date = #{checkin_date}, nights = #{nights}
+        where num = #{num}
+    </update>
+
+    <delete id="deleteHotel">
+        delete hotel
+        where num = #{num}
+    </delete>
+
+</mapper>

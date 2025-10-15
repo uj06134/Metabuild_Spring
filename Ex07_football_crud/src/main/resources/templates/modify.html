@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+</head>
+<body>
+
+<h2>Football 수정</h2>
+<form th:action="@{/modifyProc}" th:object="${fDto}" method="post">
+    <input type="hidden" th:field="*{num}">
+    <input type="hidden" name="whatColumn" th:value="${whatColumn}">
+    <input type="hidden" name="keyword" th:value="${keyword}">
+    <input type="hidden" name="page" th:value="${page}">
+
+    <table border="1" width="500">
+        <tr>
+            <th>아이디</th>
+            <td th:text="${fDto.id}"></td>
+        </tr>
+        <tr>
+            <th>비번</th>
+            <td><input type="text" th:field="*{pw}"></td>
+        </tr>
+        <tr>
+            <th>우승예상국가</th>
+            <td>
+                <!--<input type="radio" th:field="*{win}" value="한국">한국
+                <input type="radio" th:field="*{win}" value="미국">미국
+                <input type="radio" th:field="*{win}" value="독일">독일
+                <input type="radio" th:field="*{win}" value="스페인">스페인-->
+                <span th:each="nation : ${nationList1}">
+                    <input type="radio" name="win" th:value="${nation}" th:checked="${fDto.win == nation}">[[${nation}]]
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>16강 예상국가</th>
+            <td>
+                <!--<input type="checkbox" th:field="*{round16}" value="한국">한국
+                <input type="checkbox" th:field="*{round16}" value="멕시코">멕시코
+                <input type="checkbox" th:field="*{round16}" value="독일">독일
+                <input type="checkbox" th:field="*{round16}" value="브라질">브라질
+                <input type="checkbox" th:field="*{round16}" value="스위스">스위스
+                <input type="checkbox" th:field="*{round16}" value="잉글랜드">잉글랜드-->
+                <span th:each="nation : ${nationList2}">
+                    <input type="checkbox" name="round16" th:value="${nation}" th:checked="${fDto.round16.contains(nation)}"> [[${nation}]]
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input type="submit" value="수정">
+            </td>
+        </tr>
+    </table>
+
+</form>
+</body>
+</html>

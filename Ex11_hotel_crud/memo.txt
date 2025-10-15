@@ -1,0 +1,25 @@
+drop table hotel;
+drop sequence hotel_seq;
+
+create table hotel (
+    num number primary key,                -- 예약번호
+    name varchar2(30) not null,            -- 투숙객 이름
+    services varchar2(100),                -- 추가 서비스 (checkbox: 조식, 스파, 픽업, 라운지)
+    room_type varchar2(20),                -- 객실 타입 (radio: 스탠다드 / 디럭스 / 스위트)
+    payment varchar2(20),                  -- 결제 방식 (select-option: 카드 / 계좌이체 / 현금)
+    checkin_date date,                     -- 체크인 날짜
+    nights number                          -- 숙박일수
+);
+
+create sequence hotel_seq
+minvalue 1
+start with 1
+nocache;
+
+insert into hotel values(hotel_seq.nextval, '김철수', '조식,스파', '디럭스', '카드', to_date('2025-10-05','yyyy-mm-dd'), 2);
+insert into hotel values(hotel_seq.nextval, '이영희', '픽업,라운지', '스위트', '계좌이체', to_date('2025-10-10','yyyy-mm-dd'), 3);
+insert into hotel values(hotel_seq.nextval, '박민수', '조식', '스탠다드', '현금', to_date('2025-10-15','yyyy-mm-dd'), 1);
+
+commit;
+
+select * from hotel;

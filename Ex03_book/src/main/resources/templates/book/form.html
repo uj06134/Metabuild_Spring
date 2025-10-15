@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .err{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    book/form.html<br>
+    <form th:action="bookProc" th:object="${bb}" method="post">
+        제목: <input th:field="*{title}"><br>
+        <div th:if="${#fields.hasErrors('title')}"
+             th:errors="*{title}" class = "err"></div>
+        저자: <input th:field="*{author}"><br>
+        <div th:if="${#fields.hasErrors('author')}"
+             th:errors="*{author}" class = "err"></div>
+        가격: <input th:field="*{price}"><br>
+        <div th:if="${#fields.hasErrors('price')}"
+             th:errors="*{price}" class = "err"></div>
+        출판사: <input th:field="*{publisher}"><br>
+        <div th:if="${#fields.hasErrors('publisher')}"
+             th:errors="*{publisher}" class = "err"></div>
+        <br>
+        구입가능 서점:
+        <input type = "checkbox" th:field="*{bookstore}" value="교보문고">교보문고
+        <input type = "checkbox" th:field="*{bookstore}" value="알라딘">알라딘
+        <input type = "checkbox" th:field="*{bookstore}" value="yes24">yes24
+        <div th:if="${#fields.hasErrors('bookstore')}"
+             th:errors="*{bookstore}" class = "err"></div>
+
+        <br>
+        <button type="submit">전송</button>
+    </form>
+</body>
+</html>

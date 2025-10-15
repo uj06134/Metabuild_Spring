@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel 상세보기</title>
+    <style>
+        .center {
+            width: 600px;
+            margin: auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            width: 120px;
+        }
+        a {
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+<div class="center">
+    <h2>Travel 상세보기</h2>
+
+    <table>
+        <tr>
+            <th>번호</th>
+            <td th:text="${tDto.num}"></td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td th:text="${tDto.name}"></td>
+        </tr>
+        <tr>
+            <th>나이</th>
+            <td th:text="${tDto.age}"></td>
+        </tr>
+        <tr>
+            <th>관심지역</th>
+            <td th:text="${tDto.areaAsString}"></td>
+        </tr>
+        <tr>
+            <th>여행 타입</th>
+            <td th:text="${tDto.style}"></td>
+        </tr>
+        <tr>
+            <th>가격대</th>
+            <td th:text="${tDto.price}"></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <a th:href="@{/update(num=${tDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a> |
+                <a th:href="@{/delete(num=${tDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a> |
+                <a th:href="@{/list(page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">목록</a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

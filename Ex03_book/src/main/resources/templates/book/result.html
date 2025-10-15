@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    book/result.html<br>
+    제목: <span th:text="${bb.title}"></span><br>
+    저자: <span th:text="${bb.author}"></span><br>
+    가격: <span th:text="${bb.price}"></span><br>
+    출판사: <span th:text="${bb.publisher}"></span><br>
+    서점: <span th:each="bs : ${bb.bookstore}" th:text="${bs} + ' '"></span>
+</body>
+</html>

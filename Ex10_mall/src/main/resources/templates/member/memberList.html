@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 리스트</title>
+</head>
+<body>
+<h1>회원 리스트 화면</h1>
+<div th:insert="~{fragment :: header}"></div>
+<table border="1" width="800" style="text-align:center; border-collapse:collapse;">
+
+    <!-- 검색창 -->
+    <tr>
+        <td colspan="9" style="text-align:center; padding:10px;">
+            <form th:action="@{mlist.mb}" method="get">
+                <select name="whatColumn">
+                    <option value="all" th:selected="${whatColumn == 'all'}">전체검색</option>
+                    <option value="name" th:selected="${whatColumn == 'name'}">이름</option>
+                    <option value="gender" th:selected="${whatColumn == 'gender'}">성별</option>
+                </select>
+                <input type="text" name="keyword" th:value="${keyword}">
+                <input type="submit" value="검색">
+            </form>
+        </td>
+    </tr>
+
+    <!-- 추가 버튼 -->
+    <tr>
+        <td colspan="9" style="text-align:right;">
+            <button type="button" onclick="location.href='/minsert.mb'">추가하기</button>
+        </td>
+    </tr>
+
+    <!-- 컬럼 헤더 -->
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>비번</th>
+        <th>성별</th>
+        <th>취미</th>
+        <th>주소</th>
+        <th>포인트</th>
+        <th>수정</th>
+        <th>삭제</th>
+    </tr>
+
+    <!-- 데이터 반복 출력 -->
+    <th:block th:each="mDto : ${memberLists}">
+        <tr>
+            <td th:text="${mDto.id}"></td>
+            <td th:text="${mDto.name}"></td>
+            <td th:text="${mDto.password}"></td>
+            <td th:text="${mDto.gender}"></td>
+            <td th:text="${mDto.hobbyAsString}"></td>
+            <td th:text="${mDto.address}"></td>
+            <td th:text="${mDto.mpoint}"></td>
+            <td>
+                <a th:href="@{/mupdate.mb(id=${mDto.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a>
+            </td>
+            <td>
+                <a th:href="@{/mdelete.mb(id=${mDto.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a>
+            </td>
+        </tr>
+    </th:block>
+    <!-- 페이지네이션 -->
+    <tr>
+        <td colspan="9" style="text-align:center;">
+                <span th:if="${page > 1}">
+                    <a th:href="@{/mlist.mb(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a>
+                </span>
+
+            <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+                    <a th:if="${i != page}"
+                       th:href="@{/mlist.mb(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                       th:text="${i}"></a>
+
+                    <span th:if="${i == page}"
+                          th:text="${i}"
+                          style="font-weight:bold;color:black"></span>
+                </span>
+
+            <span th:if="${page < totalPage}">
+                    <a th:href="@{/mlist.mb(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+                </span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,23 @@
+[IntelliJ IDEA 필수 단축키]
+
+줄 복제 : Ctrl + D
+줄 삭제 : Ctrl + Y
+잘라내기 : Ctrl + X
+줄 이동 : Shift + Alt + ↑ / ↓
+코드 정렬: Ctrl + Alt + L
+import 최적화: Ctrl + Alt + O
+들여쓰기 보정: Ctrl + Alt + I
+
+<dependency>를 추가한 경우
+메이븐 누르고 새로고침
+
+main이랑 같은 위치나 하위에 파일을 생성
+
+import 불가능할 때
+1) maven - Lifecycle - compile
+2) file - invalidate caches - restart
+3)
+IntelliJ / Eclipse 등 IDE 종료
+C:\Users\uj061\.m2이동
+repository 폴더 삭제
+maven - Lifecycle - clean - install

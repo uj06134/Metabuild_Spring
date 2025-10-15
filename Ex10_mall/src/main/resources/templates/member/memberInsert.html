@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .err {
+            color: red;
+        }
+    </style>
+</head>
+<script>
+    let idChecked = false; // 사용자가 '중복체크' 버튼을 눌렀는지 여부
+    let idAvailable = false; // 중복체크 결과, 사용 가능한 아이디인지 여부
+
+    // [아이디 중복체크 버튼을 눌렀을 때 실행되는 함수]
+    function checkId(){
+        idValue = document.getElementById('idInput').value;
+        if(idValue == ''){
+            alert('아이디를 입력하세요');
+            return;
+        }
+
+        // 서버에 AJAX 요청 (fetch 사용)
+        // 컨트롤러에 /checkId.mb?id=아이디 형태로 요청 보냄
+        fetch("/checkId.mb?id="+encodeURIComponent(idValue))
+        .then(response => response.text())
+        .then(result => {
+            const msgSpan = document.getElementById('idCheckResult');
+            idChecked = true; // 중복체크를 판별 여부
+            if(result == "duplicate"){
+                msgSpan.textContent = '이미 사용중인 아이디'
+                msgSpan.style.color = "red";
+                idAvailable = false;
+            } else{
+                msgSpan.textContent = '사용 가능한 아이디'
+                msgSpan.style.color = "green";
+                idAvailable = true;
+            }
+        })
+        .catch(error =>{
+            console.log("에러 발생" + error);
+        })
+    }
+
+    // [아이디 입력창에 새로운 값이 들어왔을 때 실행되는 함수]
+    function resetIdCheck(){
+        // 새로운 값을 입력했으므로 이전 중복체크 결과는 무효화
+        idChecked = false;
+        idAvailable = false;
+
+        // 메시지 초기화
+        const msgSpan = document.getElementById('idCheckResult');
+        msgSpan.textContent = ''
+    }
+
+    // [폼 제출 시 유효성 검사 함수]
+    function validateForm(){
+        if(!idChecked){ // 중복체크를 안 눌렀을 경우
+            alert('아이디 중복체크를 먼저 하세요');
+            return false;
+        }
+        if(!idAvailable){ // 중복된 아이디일 경우
+            alert('이미 사용중인 아이디입니다.');
+            return false;
+        }
+        return true; // 모든 조건 통과 시 제출 허용
+    }
+</script>
+<body>
+<h2>회원 가입</h2>
+<div th:insert="~{fragment :: header}"></div>
+<form th:action="@{/minsert.mb}" th:object="${mDto}" method="post" onsubmit="return validateForm()">
+    <input type="hidden" name="whatColumn" th:value="${whatColumn}">
+    <input type="hidden" name="keyword" th:value="${keyword}">
+    <input type="hidden" name="page" th:value="${page}">
+    <table border="1">
+        <tr>
+            <th>아이디</th>
+            <td>
+                <input id="idInput" type="text" th:field="*{id}" oninput="resetIdCheck()">
+                <input type="button" value="중복체크" onClick="checkId()">
+                <span id="idCheckResult"></span>
+                <div th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td>
+                <input type="text" th:field="*{name}">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>비밀번호</th>
+            <td>
+                <input type="text" th:field="*{password}">
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>성별</th>
+            <td>
+                <input type="radio" th:field="*{gender}" value="남자"> 남자
+                <input type="radio" th:field="*{gender}" value="여자"> 여자
+                <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>취미</th>
+            <td>
+                <input type="checkbox" th:field="*{hobby}" value="마라톤"> 마라톤
+                <input type="checkbox" th:field="*{hobby}" value="영화감상"> 영화감상
+                <input type="checkbox" th:field="*{hobby}" value="게임"> 게임
+                <input type="checkbox" th:field="*{hobby}" value="공부"> 공부
+                <div th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td>
+                <input type="text" th:field="*{address}">
+                <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>적립포인트</th>
+            <td>
+                <input type="text" th:field="*{mpoint}">
+                <div th:if="${#fields.hasErrors('mpoint')}" th:errors="*{mpoint}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="추가하기">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+이름(model): <span th:text="${mname}"></span><br>
+이름(request): <span th:text="${rname}"></span><br>
+
+나이(model): <span th:text="${mage}"></span><br>
+나이(request): <span th:text="${rage}"></span><br>
+
+취미(model):
+<ul>
+    <li th:each="mh : ${mhobby}" th:text="${mh}"></li>
+</ul>
+
+취미(request):
+<ul>
+    <li th:each="rh : ${rhobby}" th:text="${rh}"></li>
+</ul>
+
+</body>
+</html>

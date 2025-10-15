@@ -1,0 +1,67 @@
+drop table person;
+create table person(
+num number primary key,
+id varchar2(10),
+name varchar2(20),
+age number
+);
+
+drop sequence person_seq;
+create sequence person_seq
+start with 1
+minvalue 1
+increment by 1;
+
+commit;
+
+col id for a10
+col name for a10
+select * from person;
+
+------------------------------------
+pom.xml 추가
+
+properties 아래 추가
+<repositories>
+		<repository>
+			<id>oracle</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+</repositories>
+
+<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>3.0.5</version>
+</dependency>
+------------------------------------
+application.properties 작성
+
+server.port = 8080
+    spring.datasource.url=jdbc:oracle:thin:@localhost:1521:orcl
+    spring.datasource.username=sqlid
+    spring.datasource.password=sqlpw
+    spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+mybatis.mapper-locations=classpath:mapper/*.xml
+------------------------------------
+순서
+1. pom.xml 추가 및 application.properties 작성
+2. DB 테이블 생성
+3. DTO 작성
+4. Mapper 인터페이스 & XML 작성
+    1) PersonMapper.java
+    2) PersonMapper.xml
+5. Controller 작성
+    1) form : 입력폼 띄우기
+    2) insertProc (POST) : 데이터 등록
+    3) list (GET) : 목록 조회
+    4) content_view (GET) : 상세보기
+    5) modify (GET) : 수정폼 띄우기
+    6) modify (POST) : 수정 처리
+    7) delete (GET) : 삭제 처리
+6. View (Thymeleaf 템플릿)
+    1) form.html : 신규 데이터 입력
+    2) list.html : 전체 목록 출력 + 상세보기 링크
+    3) content_view.html : 상세보기 (수정/삭제 링크 포함)
+    4) modify.html : 수정폼

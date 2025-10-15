@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+</head>
+<body>
+<h2>Football 상세보기</h2>
+<table border="1">
+    <tr>
+        <th>번호</th>
+        <td th:text="${fDto.num}"></td>
+    </tr>
+    <tr>
+        <th>아이디</th>
+        <td th:text="${fDto.id}"></td>
+    </tr>
+    <tr>
+        <th>비번</th>
+        <td th:text="${fDto.pw}"></td>
+    </tr>
+    <tr>
+        <th>우승예상국가</th>
+        <td th:text="${fDto.win}"></td>
+    </tr>
+    <tr>
+        <th>16강 예상국가</th>
+        <td th:text="${fDto.round16AsString}"></td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align:center;">
+            <a th:href="@{/modify(num=${fDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a> |
+                <a th:href="@{/delete(num=${fDto.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a> |
+            <a th:href="@{/list(page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">목록</a>
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>

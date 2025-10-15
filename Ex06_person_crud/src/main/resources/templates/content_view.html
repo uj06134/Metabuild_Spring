@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 상세보기</title>
+</head>
+<body>
+<h2>회원 상세보기</h2>
+<table border="1">
+    <tr>
+        <th>번호</th>
+        <td th:text="${pDto.num}"></td>
+    </tr>
+    <tr>
+        <th>아이디</th>
+        <td th:text="${pDto.id}"></td>
+    </tr>
+    <tr>
+        <th>이름</th>
+        <td th:text="${pDto.name}"></td>
+    </tr>
+    <tr>
+        <th>나이</th>
+        <td th:text="${pDto.age}"></td>
+    </tr>
+</table>
+
+<p>
+    <a th:href="@{/modify(num=${pDto.num})}">수정</a> |
+    <a th:href="@{/delete(num=${pDto.num})}">삭제</a> |
+    <a th:href="@{/list}">목록</a>
+</p>
+</body>
+</html>

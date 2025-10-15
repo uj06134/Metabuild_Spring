@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+    <style>
+        .err {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>마트 상품 구매 내역</h1>
+<form th:action="@{/productProc}" th:object="${pb}" method="post">
+
+    아이디: <input type="text" th:field="*{id}"><br>
+    <div th:if="${#fields.hasErrors('id')}"
+         th:errors="*{id}" class="err"></div>
+
+    비번: <input type="text" th:field="*{pw}"><br>
+    <div th:if="${#fields.hasErrors('pw')}"
+         th:errors="*{pw}" class="err"></div>
+
+    구매상품:
+    <input type="checkbox" th:field="*{product}" value="식품">식품
+    <input type="checkbox" th:field="*{product}" value="의류">의류
+    <input type="checkbox" th:field="*{product}" value="도서">도서
+    <input type="checkbox" th:field="*{product}" value="가구">가구
+    <div th:if="${#fields.hasErrors('product')}"
+         th:errors="*{product}" class="err"></div>
+    <br>
+
+    배송시간:
+    <select th:field="*{time}">
+        <option value="">선택</option>
+        <option value="오전">오전</option>
+        <option value="오후">오후</option>
+    </select>
+    <div th:if="${#fields.hasErrors('time')}"
+         th:errors="*{time}" class="err"></div>
+    <br>
+
+    결제방법:
+    <input type="radio" th:field="*{approve}" value="카드">카드
+    <input type="radio" th:field="*{approve}" value="핸드폰">핸드폰
+    <div th:if="${#fields.hasErrors('approve')}"
+         th:errors="*{approve}" class="err"></div>
+    <br>
+
+    결제 동의:
+    <input type="checkbox" th:field="*{agree}" value="동의">동의
+    <div th:if="${#fields.hasErrors('agree')}"
+         th:errors="*{agree}" class="err"></div>
+    <br>
+
+    <button type="submit">보내기</button>
+</form>
+</body>
+</html>
